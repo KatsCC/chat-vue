@@ -52,7 +52,7 @@ export default {
     };
   },
   created() {
-    this.ws = new WebSocket("wss://render-websocket-chat.onrender.com");
+    this.ws = new WebSocket(`wss://${import.meta.env.VITE_SERVER_URL}`);
 
     this.ws.onmessage = (event) => {
       if (event.data instanceof Blob) {
