@@ -46,14 +46,18 @@ export default {
   data() {
     return {
       ws: null,
-      username: this.$route.query.username || "[  ]",
+      username: this.$route.query.username || "",
       messages: [],
       newMessage: "",
     };
   },
   created() {
     this.ws = new WebSocket(`wss://${import.meta.env.VITE_SERVER_URL}`);
-
+    if (!this.username) {
+      this.$router.push({
+        name: "Name",
+      });
+    }
     this.ws.onmessage = (event) => {
       if (event.data instanceof Blob) {
         const reader = new FileReader();
