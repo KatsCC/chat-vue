@@ -62,19 +62,25 @@ export default {
       if (event.data instanceof Blob) {
         const reader = new FileReader();
         reader.onload = () => {
-          const msgData = JSON.parse(reader.result);
-          this.messages.push(msgData);
-          this.scrollToBottom();
+          this.handleMessage(reader.result);
         };
         reader.readAsText(event.data);
       } else {
-        const msgData = JSON.parse(event.data);
-        this.messages.push(msgData);
-        this.scrollToBottom();
+        this.handleMessage(event.data);
       }
     };
   },
   methods: {
+    handleMessage(data) {
+      const msgData = JSON.parse(data);
+
+      if (msgData.type === "history") {
+        this.messages.push(...msgData.messages);
+      } else {
+        this.messages.push(msgData);
+      }
+      this.scrollToBottom();
+    },
     generateColor(username) {
       let hash = 0;
       for (let i = 0; i < username.length; i++) {
